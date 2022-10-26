@@ -1,4 +1,6 @@
+import grabber.impl.SpysMeGrabber;
 import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -9,7 +11,7 @@ public class GrabberTest {
     String url = "https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt";
 
     @Test
-    public void request() throws IOException, InterruptedException {
+    public void request() throws InterruptedException {
         //第一步 创建OkHttpClient对象
         OkHttpClient client = new OkHttpClient();
         // 一个grabber可能有多个URL，所以考虑还需要在grabber类加一个getURLs，然后循环访问
@@ -22,7 +24,7 @@ public class GrabberTest {
         // 回调函数可以放到grabber类里面,
         call.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 //异步请求失败之后的回调
                 //TODO:用Logger
                 e.printStackTrace();
@@ -30,7 +32,7 @@ public class GrabberTest {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 //异步请求成功之后的回调
                 // 执行页面解析代码
                 String content = response.body().string();
@@ -50,6 +52,14 @@ public class GrabberTest {
         });
 
         // Sleep主现成防止协程返回之前结束作业。
+        Thread.sleep(5000);
+    }
+
+    @Test
+    public void SpysMeGrabberTest() throws InterruptedException {
+        SpysMeGrabber spysMeGrabber = new SpysMeGrabber();
+        spysMeGrabber.run();
+
         Thread.sleep(5000);
     }
 
