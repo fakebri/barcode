@@ -6,7 +6,6 @@ public enum HttpClientUtil {
     INSTANCE;
     private final OkHttpClient client = new OkHttpClient();
 
-
     public void requestAsync(String url, String method, RequestBody requestBody, Callback callback) {
         Request.Builder builder = new Request.Builder()
                 .url(url)
@@ -41,4 +40,7 @@ public enum HttpClientUtil {
     }
 
 
+    public OkHttpClient getClient() {
+        return client;
+    }
 }
